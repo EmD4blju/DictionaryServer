@@ -1,24 +1,14 @@
 ## Dictionary server ##
-Programowanie klient-serwer z użyciem gniazd i protokołów sieciowycych (serwer wielowątkowy, bez kanałów i  selektorów)
+Client-server programming using sockets and network protocols (multi-threaded server, without channels and selectors)
 
-Zaprojektuj aplikację umożliwiającą korzystanie z usługi słownikowej w różnych językach. Struktura aplikacji powinna składać się, min. z
+Design an application that allows using a dictionary service in different languages. The application structure should consist of at least:
 
-* serwera głównego,
+* main server,
+* client with a simple GUI,
+* servers responsible for dictionaries in various languages.
 
-* klienta z prostym GUI,
+Each dictionary server stores data in one language, for simplification, it can be assumed that they are pairs {Polish word, translation}. Languages are identified by short codes (e.g. "PL", "EN", "FR", ...). The application should allow easy addition of support/servers for new languages.
 
-* serwerów odpowiadających się za słowniki w poszczególnych językach.
+The client sends a query to the main server in the form {"Polish word to translate", "target language code", port}. In case the client provides an incorrect/non-existent language code, the main server should return an appropriate message to the client. The port on which the client expects the translation will be closed after receiving the information from the dictionary server.
 
-Każdy serwer słownikowy przechowuje dane do słownika w jednym języku, dla uproszczenia można przyjąć, że są to pary {polskie hasło, tłumaczenie}. Języki są identyfikowane za pomocą krótkich kodów (np. "PL", "EN", "FR", ...). Aplikacja powinna umożliwić proste dodawanie obsługi/serwerów nowych języków.
-
-Klient przekazuje do serwera głównego zapytanie w postaci {"polskie słowo do przetłumaczenia", "kod języka docelowego", port}. W przypadku podawania przez klienta błędnego/nieistniejącego kodu języka, serwer główny powinien zwrócić klientowi odpowiedni komunikat. Port, na którym klient oczekuje na tłumaczenie zostanie zamknięty po nadejściu informacji od serwera słownikowego.
-
-Serwer główny wysyła do konkretnego serwera słownikowego komunikat w postaci {"polskie słowo do przetłumaczenia", adres klienta, port na którym klient czeka na wynik}. Następuje połączenie od serwera słownikowego do klienta oraz przekazywanie wyniku tłumaczenia, po czym to połączenie zostanie zamknięte.
-
-Można założyć, że maszyny serwera głównego, klientów, serwerów językowych są wzajemnie dostępne.
-
-Pożądana jest możliwość równoległej obsługi wielu klientów.
-
-Proste GUI klienta powinno być odseparowane od logiki działania.
-
-Należy zadbać o obsługę sytuacji wyjątkowych.
+The main server sends a message to a specific dictionary server in the form {"Polish word to translate", client address, port on which the client is waiting for the result}. A connection is made from the dictionary server to the client, and the translation result is forwarded, after which the connection is closed.
