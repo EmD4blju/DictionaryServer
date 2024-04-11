@@ -32,6 +32,7 @@ public class Controller {
                 System.out.println("=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=");
                 System.out.println("Waiting for response...");
                 ServerSocket serverSocket = new ServerSocket(port);
+                serverSocket.setSoTimeout(5000);
                 Socket receiveSocket = serverSocket.accept();
                 Client.ReceiveHandler receiveHandler = new Client.ReceiveHandler(receiveSocket);
                 receiveHandler.handleRequest();
@@ -39,7 +40,8 @@ public class Controller {
                 receiveSocket.close();
                 serverSocket.close();
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                view.getResultArea().setText("Something went wrong");
+                System.out.println(view.getResultArea().getText());
             }
 
 

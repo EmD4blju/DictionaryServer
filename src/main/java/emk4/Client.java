@@ -93,6 +93,7 @@ public class Client {
         client.close();
         if (httpCode != 200) return;
         ServerSocket serverSocket = new ServerSocket(port);
+        serverSocket.setSoTimeout(5000);
         System.out.println("=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=-=-=");
         System.out.println("Waiting for response...");
         Socket receiveSocket = serverSocket.accept();
